@@ -3,7 +3,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-
 jobs:
   push-to-hf:
     runs-on: ubuntu-latest
@@ -12,18 +11,15 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      
-      # Debug step to confirm the secret is available
-      - name: Check if SSH key secret is available
-        run: |
-          echo "SSH private key secret is available"
-
-      - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}  # Ensure this matches the secret name
-
-      - name: Push to Hugging Face
+          ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}
+      - name: Setup Git config
         run: |
-          git remote set-url origin git@hf.co:spaces/fdaudens/voila-test
-          git push origin main --force
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa huggingface.co >> ~/.ssh/known_hosts
+      - name: Push to Hugging Face
+        run: git push git@huggingface.co:spaces/voila-dashboards/voila-huggingface main --force
