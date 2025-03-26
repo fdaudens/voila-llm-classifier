@@ -15,7 +15,7 @@ jobs:
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}  # Ensure this matches the secret name
       - name: Push to Hugging Face
         run: |
           git remote set-url origin git@huggingface.co:spaces/fdaudens/voila-test.git
