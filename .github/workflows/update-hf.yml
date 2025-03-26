@@ -12,11 +12,18 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      
+      # Debug step to confirm the secret is available
+      - name: Check if SSH key secret is available
+        run: |
+          echo "SSH private key secret is available"
+
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}  # Ensure this matches the secret name
+
       - name: Push to Hugging Face
         run: |
-          git remote set-url origin git@hf.co:spaces/fdaudens/voila-test.git
+          git remote set-url origin git@huggingface.co:spaces/fdaudens/voila-test.git
           git push origin main --force
