@@ -12,10 +12,11 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}
       - name: Push to Hugging Face
-        env:
-          HF_USER: ${{ secrets.HF_USER }}
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git remote set-url origin https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/fdaudens/voila-test.git
+          git remote set-url origin git@huggingface.co:spaces/fdaudens/voila-test.git
           git push origin main --force
