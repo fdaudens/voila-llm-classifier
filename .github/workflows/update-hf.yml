@@ -13,8 +13,46 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      # Run Voila for multiple notebooks
+      - name: Run Voila for each notebook
+        run: |
+          # List of notebook files you want to run Voila on
+          notebooks=("ch5-prompting-with-python.ipynb" "ch6-structured-responses.ipynb")
+
+          # Iterate over each notebook and run Voila
+          for notebook in "${notebooks[@]}"; do
+            echo "Running Voila for $notebook"
+            voila $notebook --show &
+          done
+
+          # Wait for all background Voila processes to finish
+          wait
+
       - name: Push to Hugging Face
         env:
           HF_USER: ${{ secrets.HF_USER }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: git push https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/fdaudens/voila-test main --force
+
+
+name: Update Hugging Face repository
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  push-to-hf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      
+      # Set up SSH key (for pushing to Hugging Face via SSH)
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.HF_SSH_PRIVATE_KEY }}
+
