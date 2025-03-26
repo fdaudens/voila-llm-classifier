@@ -15,10 +15,13 @@ jobs:
           lfs: true
 
       # Run Voila for multiple notebooks without executing them
-      - name: Run Voila for each notebook
+      - name: Run Voila for each notebook without executing
         run: |
           # List of notebook files you want to run Voila on
           notebooks=("ch5-prompting-with-python.ipynb" "ch6-structured-responses.ipynb")
+
+          # Set Jupyter environment variable to prevent code execution
+          export JUPYTER_ALLOW_INSECURE_WRITES=1
 
           # Iterate over each notebook and run Voila without execution
           for notebook in "${notebooks[@]}"; do
