@@ -25,5 +25,5 @@ jobs:
 
       - name: Push to Hugging Face
         run: |
-          git remote set-url origin git@huggingface.co:spaces/fdaudens/voila-test.git
+          git remote set-url origin git@hf.co:spaces/fdaudens/voila-test
           git push origin main --force
