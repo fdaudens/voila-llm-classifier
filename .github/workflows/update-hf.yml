@@ -13,16 +13,17 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      # Run Voila for multiple notebooks
+
+      # Run Voila for multiple notebooks without executing them
       - name: Run Voila for each notebook
         run: |
           # List of notebook files you want to run Voila on
           notebooks=("ch5-prompting-with-python.ipynb" "ch6-structured-responses.ipynb")
 
-          # Iterate over each notebook and run Voila
+          # Iterate over each notebook and run Voila without execution
           for notebook in "${notebooks[@]}"; do
             echo "Running Voila for $notebook"
-            voila $notebook --show &
+            voila $notebook --no-execute --show &
           done
 
           # Wait for all background Voila processes to finish
